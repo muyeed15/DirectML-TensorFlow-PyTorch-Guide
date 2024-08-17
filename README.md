@@ -101,6 +101,76 @@ While running your DirectML-based scripts, you can monitor GPU usage using the T
 4. **Change the View**: In the GPU tab, change one of the graphs to "Compute 0", "Compute 1", etc., to monitor GPU computation usage.
 5. **Check Dedicated GPU Memory**: Observe "Dedicated GPU Memory" usage to see how much memory your TensorFlow or PyTorch tasks are using.
 
+## Performance Comparison
+
+To compare the performance of DirectML with GPU acceleration versus CPU execution, you can use the following scripts. These scripts perform intensive matrix operations and measure the time taken on DirectML (if available) versus CPU.
+
+### PyTorch Performance Comparison
+
+This script performs complex matrix operations and compares the execution time on DirectML (if available) with that on the CPU:
+
+```python
+import torch
+import torch_directml
+import time
+
+# Function to perform a complex operation
+def complex_operations(tensor):
+    # Perform a series of intensive operations
+    result_mm = torch.mm(tensor, tensor)
+    result_elementwise = tensor * tensor
+    result_sum = torch.sum(result_elementwise)
+    return result_mm, result_elementwise, result_sum
+
+# Check if DirectML is available
+dml = torch_directml.device()
+device = dml if dml else 'cpu'
+
+# Define a very large size for the matrices
+N = 10000  # Adjust this size based on your system's capabilities
+
+# Create random tensors
+tensor1 = torch.rand(N, N, device=device)
+tensor2 = torch.rand(N, N, device=device)
+
+# Time the DirectML operation if available
+if device != 'cpu':
+    start_time = time.time()
+    
+    # Perform complex operations on DirectML
+    result_mm_dml, result_elementwise_dml, result_sum_dml = complex_operations(tensor1)
+    
+    dml_time = time.time() - start_time
+else:
+    dml_time = None
+
+# Move tensors to CPU for CPU operation
+tensor1_cpu = tensor1.cpu()
+tensor2_cpu = tensor2.cpu()
+
+# Time the CPU operation
+start_time = time.time()
+
+# Perform the same complex operations on CPU
+result_mm_cpu, result_elementwise_cpu, result_sum_cpu = complex_operations(tensor1_cpu)
+
+cpu_time = time.time() - start_time
+
+# Print the results
+if dml_time is not None:
+    print(f"Time taken on DirectML (GPU): {dml_time:.4f} seconds")
+    print(f"DirectML Result Sum: {result_sum_dml.item():.4f}")
+    # To avoid overwhelming the output, only show the shape of the results
+    print(f"DirectML Result MM Shape: {result_mm_dml.shape}")
+    print(f"DirectML Result Elementwise Shape: {result_elementwise_dml.shape}")
+
+print(f"Time taken on CPU: {cpu_time:.4f} seconds")
+print(f"CPU Result Sum: {result_sum_cpu.item():.4f}")
+# To avoid overwhelming the output, only show the shape of the results
+print(f"CPU Result MM Shape: {result_mm_cpu.shape}")
+print(f"CPU Result Elementwise Shape: {result_elementwise_cpu.shape}")
+```
+
 ## Notes
 
 - The specific version numbers provided are tailored to this setup and might change in the future. Ensure compatibility if you use newer versions of TensorFlow, PyTorch, or DirectML.
