@@ -1,6 +1,6 @@
-# DirectML Setup on Windows (TensorFlow 2 & PyTorch)
+# DirectML Setup on Windows (TensorFlow 2.10.0 & PyTorch 0.2.4.dev240815)
 
-This guide provides detailed instructions for setting up DirectML natively on Windows for TensorFlow 2 and PyTorch. DirectML is a high-performance, hardware-accelerated DirectX 12 library for machine learning. It provides GPU acceleration for common machine learning tasks across a broad range of supported hardware and drivers, including all DirectX 12-capable GPUs.
+This guide provides detailed instructions for setting up DirectML natively on Windows for TensorFlow 2.10.0 and PyTorch 0.2.4.dev240815. DirectML is a high-performance, hardware-accelerated DirectX 12 library for machine learning. It provides GPU acceleration for common machine learning tasks across a broad range of supported hardware and drivers, including all DirectX 12-capable GPUs.
 
 ## Requirements
 
@@ -27,25 +27,33 @@ del miniconda.exe
 
 ### 2. Set Up the Conda Environment
 
-Open the "Anaconda Prompt (miniconda3)" (not PowerShell) and create and activate a new Conda environment named `directml` with Python 3.10.14:
+Open the "Anaconda Prompt (miniconda3)" and create and activate a new Conda environment named `directml` with Python 3.10.14:
 
 ```cmd
 conda create --name "directml" python==3.10.14
 conda activate "directml"
 ```
 
-### 3. Install TensorFlow with DirectML
+### 3. Install numpy==1.26.4
 
-In the activated Conda environment, install TensorFlow and the DirectML plugin using pip:
+In the activated Conda environment, install numpy==1.26.4 using pip:
 
 ```cmd
-pip install tensorflow-cpu==2.17.0
+pip install numpy==1.26.4
+```
+
+### 4. Install tensorflow-cpu==2.10.0 and tensorflow-directml-plugin==0.4.0.dev230202
+
+Now, install tensorflow-cpu==2.10.0 and tensorflow-directml-plugin==0.4.0.dev230202 using pip in the same Conda environment:
+
+```cmd
+pip install tensorflow-cpu==2.10.0
 pip install tensorflow-directml-plugin==0.4.0.dev230202
 ```
 
-### 4. Install PyTorch with DirectML
+### 5. Install torch-directml==0.2.4.dev240815
 
-Similarly, install PyTorch with DirectML in the same Conda environment:
+Similarly, install torch-directml==0.2.4.dev240815:
 
 ```cmd
 pip install torch-directml==0.2.4.dev240815
